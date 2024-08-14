@@ -6,7 +6,7 @@ const Listproduct = () => {
   const [allproducts, setAllproducts] = useState([]);
 
   const fetchInfo = async () => {
-    const response = await fetch('http://localhost:4000/allproducts');
+    const response = await fetch('https://eccomerce-new-backend-nmhw.onrender.com/allproducts');
     const data = await response.json();
     setAllproducts(data);
   };
@@ -15,7 +15,7 @@ const Listproduct = () => {
     fetchInfo();
   }, []);
   const remove_product = async (id)=>{
-    await fetch('http://localhost:4000/removeproduct',{
+    await fetch('https://eccomerce-new-backend-nmhw.onrender.com/removeproduct',{
       method:'POST',
       headers:{
         Accepts:'application/json',

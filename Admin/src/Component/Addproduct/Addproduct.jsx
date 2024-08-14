@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import './Addproduct.css'
-import uploadarea from '../../assets/upload_area.svg'
+import React, { useState } from 'react';
+import './Addproduct.css';
+import uploadarea from '../../assets/upload_area.svg';
 
 const Addproduct = () => {
-  const [image, setImage] = useState(false);
+  const [image, setImage] = useState(null);
   const [productDetails, setProductDetails] = useState({
     name: "",
     image: "",
@@ -16,59 +16,66 @@ const Addproduct = () => {
     const file = e.target.files[0];
     setImage(file);
     setProductDetails({ ...productDetails, image: URL.createObjectURL(file) });
-  }
+  };
 
   const changeHandler = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
-  }
+  };
 
   const addProduct = async () => {
-    console.log(productDetails);
-    let responsData;
-    let product = productDetails;
+    let response;
 
+    // Upload the image
     let formData = new FormData();
-    formData.append('product',image);
+    formData.append('image', image);
 
-    await fetch("https://eccomerce-new-backend-nmhw.onrender.com",{
-      method:'POST',
-      headers:{
-        Accept:'application/json',
-      },
-      body:formData,
-    }).then((resp)=>resp.json()).then((data)=>{responsData=data});
+    response = await fetch("https://eccomerce-new-backend-nmhw.onrender.com/upload", {
+      method: 'POST',
+      body: formData,
+    });
+    const imageData = await response.json();
 
-    if(responsData.success)
-    {
-      product.image =responsData.image_url;
-       console.log(product);
-       await fetch("https://eccomerce-new-backend-nmhw.onrender.com",{
-        method:'POST',
-        headers:{
-          Accept:'application/json',
-          'Content-Type':'application/json',
+    if (imageData.success) {
+      const product = {
+        ...productDetails,
+        image: imageData.image_url // Use the URL returned from the image upload
+      };
+
+      // Add the product details
+      response = await fetch("https://eccomerce-new-backend-nmhw.onrender.com/addproducts", {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-        body:JSON.stringify(product)
-     }).then((resp)=>resp.json()).then((data)=>{
-        data.success?alert("product added"):alert("faild")
-     })
-  }
-  }
+        body: JSON.stringify(product),
+      });
+
+      const productData = await response.json();
+      if (productData.success) {
+        alert("Product added successfully");
+      } else {
+        alert("Failed to add product");
+      }
+    } else {
+      alert("Failed to upload image");
+    }
+  };
 
   return (
     <div className='add-product'>
       <div className='addproduct-itemfield'>
         <p>Product Title</p>
-        <input value={productDetails.name} onChange={changeHandler} type='text' name='name' placeholder='type here' />
+        <input value={productDetails.name} onChange={changeHandler} type='text' name='name' placeholder='Type here' />
       </div>
       <div className='addproduct-prices'>
         <div className='addproduct-itemfield'>
           <p>Price</p>
-          <input value={productDetails.old_price} onChange={changeHandler} type='text' name='old_price' placeholder='type here' />
+          <input value={productDetails.old_price} onChange={changeHandler} type='text' name='old_price' placeholder='Type here' />
         </div>
         <div className='addproduct-itemfield'>
           <p>Offer Price</p>
-          <input value={productDetails.new_price} onChange={changeHandler} type='text' name='new_price' placeholder='type here' />
+          <input value={productDetails.new_price} onChange={changeHandler} type='text' name='new_price' placeholder='Type here' />
         </div>
       </div>
       <div className='addproduct-itemfield'>
@@ -87,7 +94,7 @@ const Addproduct = () => {
       </div>
       <button onClick={addProduct} className='addproduct-btn'>Add</button>
     </div>
-  )
-}
+  );
+};
 
-export default Addproduct
+export default Addproduct;
