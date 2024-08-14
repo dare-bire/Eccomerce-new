@@ -15,12 +15,12 @@ const ShopProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
 
     useEffect(() => {
-        fetch('http://localhost:4000/allproducts')
+        fetch("https://eccomerce-new-backend-nmhw.onrender.com")
             .then((response) => response.json())
             .then((data) => setAll_product(data));
 
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/getcart', {
+            fetch("https://eccomerce-new-backend-nmhw.onrender.com", {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -36,7 +36,7 @@ const ShopProvider = (props) => {
     const addTocart = (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/addtocart', {
+            fetch("https://eccomerce-new-backend-nmhw.onrender.com", {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -53,7 +53,7 @@ const ShopProvider = (props) => {
     const removecart = (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/removecart', {
+            fetch("https://eccomerce-new-backend-nmhw.onrender.com", {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
