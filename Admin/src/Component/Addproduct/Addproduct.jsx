@@ -42,7 +42,7 @@ const Addproduct = () => {
     {
       product.image =responsData.image_url;
        console.log(product);
-       await fetch('http://localhost:4000/addproduct',{
+       await fetch("https://eccomerce-new-backend-nmhw.onrender.com",{
         method:'POST',
         headers:{
           Accept:'application/json',
