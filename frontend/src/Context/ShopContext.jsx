@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 
 export const ShopContext = createContext(null);
-
+const BACKEND_URL = "https://eccomerce-new-backend-cfm2.onrender.com";
 const getDefaultCart = () => {
     let cart = {};
     for (let index = 0; index < 300 + 1; index++) {
@@ -15,12 +15,12 @@ const ShopProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
 
     useEffect(() => {
-        fetch('http://localhost:4000/allproducts')
+        fetch(`${BACKEND_URL}/allproducts`)
             .then((response) => response.json())
             .then((data) => setAll_product(data));
 
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/getcart', {
+            fetch(`${BACKEND_URL}/getcart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -36,7 +36,7 @@ const ShopProvider = (props) => {
     const addTocart = (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/addtocart', {
+            fetch(`${BACKEND_URL}/addtocart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -53,7 +53,7 @@ const ShopProvider = (props) => {
     const removecart = (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/removecart', {
+            fetch(`${BACKEND_URL}/removecart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
