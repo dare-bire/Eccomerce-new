@@ -30,7 +30,7 @@ const Addproduct = () => {
     let formData = new FormData();
     formData.append('product',image);
 
-    await fetch('http://localhost:4000/upload',{
+    await fetch("https://eccomerce-new-backend-nmhw.onrender.com",{
       method:'POST',
       headers:{
         Accept:'application/json',
